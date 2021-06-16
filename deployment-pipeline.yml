@@ -1,0 +1,88 @@
+trigger: none
+
+resources:
+  pipelines:
+    - pipeline: Main-CI
+      source: Main-CI
+
+variables:
+  dockerRegistryServiceConnection: "ttrunck-acr"
+  kubernetesServiceConnection0: "aks-ring0"
+  kubernetesServiceConnection1: "aks-ring1"
+  imageRepository: "aspnetdevops"
+  tag: $(resources.pipeline.Main-CI.runID)
+  containerRegistry: "ttrunck.azurecr.io"
+  dockerfilePath: "**/Dockerfile"
+  imagePullSecret: "ttrunck3883c225-auth"
+
+  # Agent VM image name
+  vmImageName: "ubuntu-latest"
+
+stages:
+  - stage: Deploy_ring0
+    displayName: Deploy ring0
+
+    jobs:
+      - deployment: Deploy
+        displayName: Deploy
+        pool:
+          vmImage: $(vmImageName)
+        environment: ring0
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: KubernetesManifest@0
+                  displayName: Create imagePullSecret
+                  inputs:
+                    action: createSecret
+                    secretName: $(imagePullSecret)
+                    dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+                    kubernetesServiceConnection: $(kubernetesServiceConnection0)
+
+                - task: KubernetesManifest@0
+                  displayName: Deploy to Kubernetes cluster
+                  inputs:
+                    action: deploy
+                    manifests: |
+                      $(Pipeline.Workspace)/Main-CI/manifests/deployment.yml
+                      $(Pipeline.Workspace)/Main-CI/manifests/service.yml
+                    imagePullSecrets: |
+                      $(imagePullSecret)
+                    containers: |
+                      $(containerRegistry)/$(imageRepository):$(tag)
+                    kubernetesServiceConnection: $(kubernetesServiceConnection0)
+
+  - stage: Deploy_ring1
+    displayName: Deploy ring1
+
+    jobs:
+      - deployment: Deploy
+        displayName: Deploy
+        pool:
+          vmImage: $(vmImageName)
+        environment: ring1
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: KubernetesManifest@0
+                  displayName: Create imagePullSecret
+                  inputs:
+                    action: createSecret
+                    secretName: $(imagePullSecret)
+                    dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+                    kubernetesServiceConnection: $(kubernetesServiceConnection1)
+
+                - task: KubernetesManifest@0
+                  displayName: Deploy to Kubernetes cluster
+                  inputs:
+                    action: deploy
+                    manifests: |
+                      $(Pipeline.Workspace)/Main-CI/manifests/deployment.yml
+                      $(Pipeline.Workspace)/Main-CI/manifests/service.yml
+                    imagePullSecrets: |
+                      $(imagePullSecret)
+                    containers: |
+                      $(containerRegistry)/$(imageRepository):$(tag)
+                    kubernetesServiceConnection: $(kubernetesServiceConnection1)
