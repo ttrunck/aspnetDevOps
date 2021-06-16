@@ -11,7 +11,7 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '49fbf444-038d-493d-91ff-9ae80cec1b30'
+  dockerRegistryServiceConnection: 'ecafb312-c3b9-48e0-a898-b50296ab9972'
   imageRepository: 'aspnetdevops'
   containerRegistry: 'ttrunck.azurecr.io'
   dockerfilePath: '**/Dockerfile'
