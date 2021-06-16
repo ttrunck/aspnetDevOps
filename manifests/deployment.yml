@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: aspnetdevops 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aspnetdevops
+  template:
+    metadata:
+      labels:
+        app: aspnetdevops 
+    spec:
+      containers:
+        - name: aspnetdevops 
+          image: ttrunck.azurecr.io/aspnetdevops
+          ports:
+          - containerPort: 80
