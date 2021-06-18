@@ -1,9 +1,13 @@
 version: "3.7"
 services:
   web:
+    environment:
+      ConnectionStrings__MSSQL: "Server=db;Database=master;User=sa;Password=example_123;"
     build: app/aspnetapp
     ports:
       - 80:80
+    depends_on:
+      - db 
   db:
     environment:
       ACCEPT_EULA: "Y"
@@ -16,5 +20,3 @@ services:
         retries: 10
         start_period: 10s
         timeout: 3s     
-         
-       

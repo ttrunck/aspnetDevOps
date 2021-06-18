@@ -1,7 +1,7 @@
-apiVersion : apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aspnetdevops 
+  name: aspnetdevops
 spec:
   replicas: 1
   selector:
@@ -10,10 +10,16 @@ spec:
   template:
     metadata:
       labels:
-        app: aspnetdevops 
+        app: aspnetdevops
     spec:
       containers:
-        - name: aspnetdevops 
+        - name: aspnetdevops
           image: ttrunck.azurecr.io/aspnetdevops
+          env:
+            - name: ConnectionStrings__MSSQL
+              valueFrom:
+                secretKeyRef:
+                  name: connection-strings
+                  key: MSSQL
           ports:
-          - containerPort: 80
+            - containerPort: 80

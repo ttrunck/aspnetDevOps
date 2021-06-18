@@ -31,6 +31,8 @@ namespace aspnetapp
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddControllers();
+            services.AddHealthChecks()
+                .AddSqlServer(Configuration["ConnectionStrings:MSSQL"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +55,11 @@ namespace aspnetapp
             app.UseEndpoints(e => e.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"));
+
+            app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapHealthChecks("/health");
+                });
         }
     }
 }
