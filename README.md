@@ -1,3 +1,5 @@
+Testing feature1
+
 ## Compose sample application: ASP.NET with MS SQL server database
 
 Project structure:
