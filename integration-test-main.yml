@@ -24,8 +24,8 @@ stages:
           - task: Docker@2
             displayName: Build docker image
             inputs:
-              command: 'build'
-              Dockerfile: '**/Dockerfile'
+              command: "build"
+              Dockerfile: "**/Dockerfile"
               containerRegistry: $(dockerRegistryServiceConnection)
               repository: $(imageRepository)
               tags: |
@@ -44,50 +44,15 @@ stages:
             displayName: Integration tests
             inputs:
               targetType: "inline"
-<<<<<<< HEAD
-<<<<<<< HEAD
               script: "wget --spider --no-verbose --retry-connrefused --tries=5 http://localhost/health  || exit 1"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-              script: "curl --retry-connrefused --retry 10 --retry-delay 5 --fail http://localhost/health || exit 1"
-=======
-              script: "wget --spider --no-verbose --retry-connrefused --tries=5 http://localhost/health  || exit 1"
->>>>>>> 6071bd7 (Update integration-test-main.yml for Azure Pipelines)
-          - task: Bash@3
-            inputs:
-              targetType: "inline"
-              script: "sleep 10"
-            condition: always()
-          - task: Bash@3
-            inputs:
-              targetType: "inline"
-              script: "curl --retry-connrefused --retry 10 --retry-delay 5 --fail http://localhost/health || exit 1"
-            condition: always()
-          - task: Bash@3
-            inputs:
-              targetType: "inline"
-              script: "docker ps"
-<<<<<<< HEAD
->>>>>>> e7783ff (Update integration-test-main.yml for Azure Pipelines)
-=======
-            condition: always()
->>>>>>> d036f4d (Update integration-test-main.yml for Azure Pipelines)
-=======
->>>>>>> b64a9e7 (fix stuff)
-=======
           - task: Docker@2
             displayName: Push docker image
             inputs:
               containerRegistry: $(dockerRegistryServiceConnection)
               repository: $(imageRepository)
-              command: 'push'
+              command: "push"
               tags: |
                 $(tag)
-<<<<<<< HEAD
->>>>>>> 5daff90 (Update integration-test-main.yml for Azure Pipelines)
-=======
 
           - publish: manifests
             artifact: manifests
->>>>>>> 31443a3 (Update integration-test-main.yml for Azure Pipelines)
