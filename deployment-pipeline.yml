@@ -1,9 +1,8 @@
-trigger: none
-
 resources:
   pipelines:
     - pipeline: Main-CI
       source: Main-CI
+      trigger: true
 
 variables:
   dockerRegistryServiceConnection: "ttrunck-acr"
