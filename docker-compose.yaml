@@ -2,7 +2,7 @@ version: "3.7"
 services:
   web:
     environment:
-      ConnectionStrings__MSSQL: "Server=db;Database=master;User=sa;Password=example_123456;"
+      ConnectionStrings__MSSQL: "Server=db;Database=master;User=sa;Password=example_123;"
     build: app/aspnetapp
     ports:
       - 80:80
